@@ -1,0 +1,16 @@
+numpy
+pandas
+scipy
+networkx
+infomap
+cpnet
+networkit
+scikit-learn
+matplotlib
+seaborn
+xlrd
+openpyxl
+tqdm
+
+# 仅 07_hierarchy_core_periphery/01_nested_weighted_dcsbm.py 需要：
+# graph-tool（建议在 Linux/conda-forge 环境单独安装）
