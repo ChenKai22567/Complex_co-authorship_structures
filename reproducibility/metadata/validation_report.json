@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "passed": 84,
+  "failed": 0,
+  "failures": [],
+  "r_syntax": "skipped: Rscript is not installed in the validation environment",
+  "release_validation": true
+}
