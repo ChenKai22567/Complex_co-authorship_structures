@@ -111,6 +111,39 @@ def validate_repository(result: Validation) -> None:
     chinese = (ROOT / "README.zh-CN.md").read_text(encoding="utf-8")
     result.check("README.zh-CN.md" in english and "README.md" in chinese, "bilingual README links are reciprocal")
 
+    code_license = (ROOT / "LICENSE").read_text(encoding="utf-8")
+    data_license = (ROOT / "LICENSE-DATA").read_text(encoding="utf-8")
+    data_license_single_line = " ".join(data_license.split())
+    result.check(
+        "MIT License" in code_license
+        and "Permission is hereby granted, free of charge" in code_license
+        and 'THE SOFTWARE IS PROVIDED "AS IS"' in code_license,
+        "root LICENSE contains the complete MIT license grant and disclaimer",
+    )
+    result.check(
+        "Creative Commons Attribution 4.0 International" in data_license
+        and "https://creativecommons.org/licenses/by/4.0/legalcode" in data_license,
+        "LICENSE-DATA identifies CC BY 4.0 and links its legal code",
+    )
+    result.check(
+        "does not apply to third-party material" in data_license_single_line
+        and "Raw Web of Science records are included" in data_license_single_line
+        and "are not relicensed by this repository" in data_license_single_line,
+        "LICENSE-DATA excludes included WOS records from the project data license",
+    )
+    result.check(
+        "MIT License" in english
+        and "CC BY 4.0" in english
+        and "are not relicensed by this repository" in english,
+        "English README states the code, project-data, and third-party license boundaries",
+    )
+    result.check(
+        "MIT License" in chinese
+        and "CC BY 4.0" in chinese
+        and "本仓库不对其重新授权" in chinese,
+        "Chinese README states the code, project-data, and third-party license boundaries",
+    )
+
 
 def read_checksum_file(path: Path) -> dict[str, str]:
     checksums = {}
@@ -212,6 +245,7 @@ def main() -> int:
         )
         + "\n",
         encoding="utf-8",
+        newline="\n",
     )
     print(f"summary: passed={len(result.passes)} failed={len(result.failures)}")
     return 1 if result.failures else 0
